@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo de vehículos blindados — Armor Security</title>
+  <meta name="description" content="Catálogo de vehículos blindados en venta y alquiler. Filtra por modalidad, tipo, nivel de blindaje y marca.">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="catalogo">
+<header class="site-header" id="header"></header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Inicio</a> / Catálogo</div>
+      <h1 id="cat-title">Catálogo</h1>
+      <p>Todas nuestras unidades blindadas, en venta y en alquiler por periodos.</p>
+    </div>
+  </section>
+
+  <div class="filters">
+    <div class="wrap filters-in">
+      <div class="tabs" role="tablist" aria-label="Modalidad">
+        <button data-m="todos" role="tab">Todos</button>
+        <button data-m="venta" role="tab">Venta</button>
+        <button data-m="alquiler" role="tab">Alquiler</button>
+      </div>
+      <select class="field" id="f-tipo" aria-label="Tipo"></select>
+      <select class="field" id="f-nivel" aria-label="Nivel de blindaje"></select>
+      <select class="field" id="f-marca" aria-label="Marca"></select>
+      <input class="field search" id="f-q" type="search" placeholder="Buscar marca, línea, año o referencia" aria-label="Buscar">
+    </div>
+  </div>
+
+  <section class="sec" style="padding-top:0">
+    <div class="wrap">
+      <div class="count" id="count"></div>
+      <div class="grid-veh" id="grid"></div>
+      <p class="demo-note hidden" id="demo-note"><b>Datos de muestra.</b> Las unidades marcadas como “Muestra” son ejemplos para mostrar el diseño; se reemplazan por el inventario real.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto y cotización — Armor Security</title>
+  <meta name="description" content="Solicita una cotización para comprar o alquilar un vehículo blindado.">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="contacto">
+<header class="site-header" id="header"></header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Inicio</a> / Contacto</div>
+      <h1>Solicita tu cotización</h1>
+      <p>Cuéntanos qué necesitas y te respondemos con opciones concretas.</p>
+    </div>
+  </section>
+
+  <div class="wrap contact">
+    <div>
+      <div class="kicker">Canales</div>
+      <div class="contact-list" id="contact-list"></div>
+    </div>
+
+    <form class="form" id="c-form">
+      <div class="kicker">Formulario</div>
+      <label>Nombre
+        <input class="field" name="nombre" required autocomplete="name">
+      </label>
+      <div class="two">
+        <label>Me interesa
+          <select class="field" name="interes">
+            <option>Comprar un vehículo</option>
+            <option>Alquilar un vehículo</option>
+            <option>Asesoría sobre blindaje</option>
+          </select>
+        </label>
+        <label>Periodo (si es alquiler)
+          <select class="field" name="periodo">
+            <option value="">No aplica</option>
+            <option>Por día</option>
+            <option>Por semana</option>
+            <option>Por mes</option>
+            <option>A la medida</option>
+          </select>
+        </label>
+      </div>
+      <label>Vehículo
+        <select class="field" name="vehiculo" id="c-veh"></select>
+      </label>
+      <label>Mensaje
+        <textarea class="field" name="mensaje" placeholder="Fechas, ciudad, número de pasajeros, nivel de blindaje…"></textarea>
+      </label>
+      <button class="btn btn-gold" type="submit">Enviar solicitud</button>
+      <p class="form-note" id="c-note" role="status"></p>
+    </form>
+  </div>
+</main>
+
+<footer class="site-footer" id="footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

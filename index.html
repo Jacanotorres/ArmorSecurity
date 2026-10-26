@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Armor Security — Vehículos blindados en venta y alquiler</title>
+  <meta name="description" content="Catálogo de vehículos blindados en venta y alquiler por periodos. SUV, camionetas, sedanes y vans con blindaje certificado.">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="home">
+<header class="site-header" id="header"></header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div>
+        <div class="kicker">Blindaje vehicular</div>
+        <h1>Protección<em>en movimiento</em></h1>
+        <p class="lead">Un catálogo completo de vehículos blindados para comprar o alquilar por el tiempo que lo necesites. Elige la unidad, el nivel de blindaje y el periodo.</p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="catalogo.html">Ver catálogo</a>
+          <a class="btn" href="catalogo.html?modalidad=alquiler">Alquilar por periodo</a>
+        </div>
+        <div class="hero-meta">
+          <span>Venta</span><span>Alquiler</span><span>Todos los niveles</span>
+        </div>
+      </div>
+      <div class="hero-emblem" aria-hidden="true">
+        <svg class="rings" viewBox="0 0 400 400" fill="none" stroke="#e3ae2b" stroke-width="1">
+          <circle cx="200" cy="200" r="190" stroke-dasharray="2 8"/>
+          <circle cx="200" cy="200" r="150"/>
+          <circle cx="200" cy="200" r="110" stroke-dasharray="40 10"/>
+          <path d="M200 0v30M200 370v30M0 200h30M370 200h30" stroke-width="2"/>
+        </svg>
+        <img src="assets/img/logo.webp" alt="" width="300" height="404">
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">01 — Modalidad</div>
+        <h2>Compra o alquila</h2>
+        <p>El mismo estándar de blindaje, dos formas de tenerlo.</p>
+      </div>
+      <div class="modes">
+        <a class="mode reveal" href="catalogo.html?modalidad=venta">
+          <span class="num">V</span>
+          <div class="kicker">Propiedad</div>
+          <h3>Venta</h3>
+          <p>Vehículos blindados listos para entregar, con su nivel de protección y su ficha técnica completa.</p>
+          <span class="go">Ver vehículos en venta →</span>
+        </a>
+        <a class="mode reveal" href="catalogo.html?modalidad=alquiler">
+          <span class="num">A</span>
+          <div class="kicker">Por periodos</div>
+          <h3>Alquiler</h3>
+          <p>Por día, por semana o por mes. Para viajes, eventos, temporadas o mientras llega tu propio blindado.</p>
+          <span class="go">Ver vehículos en alquiler →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="sec-head sec-head-row reveal">
+        <div>
+          <div class="kicker">02 — Catálogo</div>
+          <h2>Unidades destacadas</h2>
+        </div>
+        <a class="btn btn-sm" href="catalogo.html">Ver todo el catálogo</a>
+      </div>
+      <div class="grid-veh" id="featured"></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">03 — Protección</div>
+        <h2>Niveles de blindaje</h2>
+        <p>Cada vehículo indica su nivel. Te ayudamos a elegir el que corresponde a tu riesgo real.</p>
+      </div>
+      <div class="grid-3" id="niveles"></div>
+      <p style="margin-top:32px"><a class="btn btn-sm" href="blindaje.html">Conocer más sobre el blindaje</a></p>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">04 — Alquiler</div>
+        <h2>Alquila por el tiempo que necesites</h2>
+        <p>Periodos pensados para cada situación. Si el tuyo no está aquí, lo armamos a la medida.</p>
+      </div>
+      <div class="grid-4" id="periodos"></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">05 — Proceso</div>
+        <h2>Así trabajamos</h2>
+      </div>
+      <div class="grid-4">
+        <div class="panel reveal"><span class="step-n">01</span><h3>Consulta</h3><p>Cuéntanos tu necesidad: uso, ciudad, número de pasajeros y nivel de riesgo.</p></div>
+        <div class="panel reveal"><span class="step-n">02</span><h3>Selección</h3><p>Te proponemos las unidades del catálogo que se ajustan a lo que pides.</p></div>
+        <div class="panel reveal"><span class="step-n">03</span><h3>Acuerdo</h3><p>Definimos condiciones de compra o el periodo de alquiler y revisamos documentos.</p></div>
+        <div class="panel reveal"><span class="step-n">04</span><h3>Entrega</h3><p>Recibes el vehículo listo, con su ficha de blindaje y acompañamiento posterior.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap reveal">
+      <h2>¿Qué vehículo necesitas?</h2>
+      <p>Dinos para qué lo requieres y te respondemos con opciones concretas.</p>
+      <div class="row">
+        <a class="btn btn-gold" href="contacto.html">Solicitar cotización</a>
+        <a class="btn" href="catalogo.html">Explorar catálogo</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
