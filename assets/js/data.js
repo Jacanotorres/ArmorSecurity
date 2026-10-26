@@ -5,14 +5,14 @@
 
 const SITE = {
   nombre: "Armor Security",
-  lema: "Blindaje vehicular · Venta y alquiler",
-  whatsapp: "",   // ej: "573001234567" (con indicativo de país)
-  telefono: "",   // texto tal como se quiere mostrar
+  lema: "Blindaje vehicular · Venta, alquiler y escoltas",
+  whatsapp: "573183535315",   // con indicativo de país
+  telefono: "+57 318 353 5315",   // texto tal como se quiere mostrar
   correo: "",
   ciudad: "",
   direccion: "",
   horario: "",
-  instagram: "",  // usuario sin @
+  instagram: "armorsecurityblin",  // usuario sin @
   facebook: "",
   tiktok: "",
   linkedin: ""
@@ -47,6 +47,14 @@ const PERIODOS = [
   { id: "semana", titulo: "Por semana", texto: "Viajes de negocios, comitivas y agendas largas." },
   { id: "mes", titulo: "Por mes", texto: "Estancias prolongadas o mientras llega tu vehículo." },
   { id: "medida", titulo: "A la medida", texto: "Temporadas, conductor, escolta y flotas completas." }
+];
+
+/* Servicio de escoltas (hombres de protección) */
+const ESCOLTAS = [
+  { tag: "Esquema individual", titulo: "Un escolta", texto: "Un hombre de protección que te acompaña en tus desplazamientos, reuniones y eventos." },
+  { tag: "Esquema de equipo", titulo: "Varios escoltas", texto: "Equipos de dos o más hombres para comitivas, directivos, familias y agendas de alto riesgo." },
+  { tag: "Con armas", titulo: "Escoltas armados", texto: "Personal armado cuando el nivel de riesgo y la normativa vigente lo permiten." },
+  { tag: "Sin armas", titulo: "Escoltas no armados", texto: "Protección y acompañamiento discreto, sin armas, para entornos de menor exposición." }
 ];
 
 /* ---------- CATÁLOGO ----------

@@ -87,7 +87,7 @@ p { margin: 0; }
 .brand img { height: 48px; width: auto; }
 .brand-name {
   font-family: var(--font-display); font-weight: 700; font-size: 24px;
-  letter-spacing: .14em; text-transform: uppercase; line-height: 1;
+  letter-spacing: .14em; text-transform: uppercase; line-height: 1; white-space: nowrap;
 }
 .brand-name b { color: var(--gold); font-weight: 700; }
 .nav { display: flex; align-items: center; gap: 28px; }
@@ -109,7 +109,7 @@ p { margin: 0; }
 .menu-btn span::before { position: absolute; top: -6px; }
 .menu-btn span::after { position: absolute; top: 6px; }
 
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   .menu-btn { display: inline-flex; }
   .nav {
     position: fixed; inset: var(--header-h) 0 auto 0;

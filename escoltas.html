@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Escoltas y hombres de protección — Armor Security</title>
+  <meta name="description" content="Servicio de escoltas con hombres de protección: uno o varios, armados o no armados, junto a tu vehículo blindado.">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-page="escoltas">
+<header class="site-header" id="header"></header>
+
+<main>
+  <section class="page-head">
+    <div class="wrap">
+      <div class="crumbs"><a href="index.html">Inicio</a> / Escoltas</div>
+      <h1>Hombres de protección</h1>
+      <p>Escoltas que te acompañan donde los necesites: uno o varios, armados o no, según tu nivel de riesgo.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">01 — Esquemas</div>
+        <h2>Elige tu esquema de protección</h2>
+        <p>Combinamos el número de hombres y el tipo de protección que mejor se ajusta a tu situación.</p>
+      </div>
+      <div class="grid-4" id="escoltas"></div>
+      <p class="note">El porte y uso de armas se rige por la normativa y los permisos vigentes. Definimos contigo el esquema adecuado.</p>
+    </div>
+  </section>
+
+  <section class="sec sec-alt">
+    <div class="wrap split">
+      <div class="reveal">
+        <div class="kicker">02 — Combínalo</div>
+        <h2 style="font-size:clamp(32px,4.5vw,48px);margin-bottom:22px">Vehículo blindado + escolta</h2>
+        <ul class="list-check">
+          <li>Alquila o compra un vehículo blindado y suma el equipo de protección.</li>
+          <li>Un solo contacto para coordinar vehículo, personal y agenda.</li>
+          <li>Esquemas por día, por semana, por mes o a la medida.</li>
+          <li>Desde un acompañamiento puntual hasta comitivas completas.</li>
+        </ul>
+        <p style="margin-top:28px"><a class="btn btn-sm" href="catalogo.html?modalidad=alquiler">Ver vehículos en alquiler</a></p>
+      </div>
+      <div class="reveal">
+        <div class="kicker">03 — Proceso</div>
+        <h2 style="font-size:clamp(32px,4.5vw,48px);margin-bottom:22px">Cómo lo definimos</h2>
+        <ul class="list-check">
+          <li>Conversamos sobre tu rutina, tus rutas y tu nivel de riesgo.</li>
+          <li>Proponemos el número de escoltas y si van armados o no.</li>
+          <li>Coordinamos fechas, ciudad y vehículo.</li>
+          <li>Te acompañamos durante todo el periodo del servicio.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap reveal">
+      <h2>¿Necesitas protección?</h2>
+      <p>Cuéntanos cuántas personas, qué fechas y en qué ciudad, y armamos el esquema contigo.</p>
+      <div class="row">
+        <a class="btn btn-gold" id="esc-wa" href="contacto.html">Cotizar escoltas</a>
+        <a class="btn" href="contacto.html">Ir al formulario</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer" id="footer"></footer>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+  (function () {
+    var n = (SITE.whatsapp || "").replace(/\D/g, "");
+    if (n) document.getElementById("esc-wa").href = "https://wa.me/" + n + "?text=" + encodeURIComponent("Hola, quiero cotizar el servicio de escoltas.");
+  })();
+</script>
+</body>
+</html>
