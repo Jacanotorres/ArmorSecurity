@@ -49,6 +49,17 @@ const PERIODOS = [
   { id: "medida", titulo: "A la medida", texto: "Temporadas, conductor, escolta y flotas completas." }
 ];
 
+/* Misión, visión y principios (borrador para aprobar con el cliente) */
+const NOSOTROS = {
+  mision: "Proteger la vida de nuestros clientes y sus familias. Ponemos a su servicio vehículos blindados en venta y alquiler, y hombres de protección, con seriedad, discreción y respuesta oportuna en cada servicio.",
+  vision: "Ser la empresa de referencia en movilidad protegida en Colombia, reconocida por la confianza de nuestros clientes, la claridad de nuestro servicio y el cumplimiento de lo que prometemos.",
+  principios: [
+    { titulo: "Seguridad", texto: "La protección de las personas es lo primero en cada vehículo que entregamos y en cada esquema que armamos." },
+    { titulo: "Confianza", texto: "Información clara sobre el nivel de blindaje, las condiciones y los precios, y cumplimiento de lo acordado." },
+    { titulo: "Discreción", texto: "Tratamos con total reserva los datos, las rutinas y los desplazamientos de quienes confían en nosotros." }
+  ]
+};
+
 /* Servicio de escoltas (hombres de protección) */
 const ESCOLTAS = [
   { tag: "Esquema individual", titulo: "Un escolta", texto: "Un hombre de protección que te acompaña en tus desplazamientos, reuniones y eventos." },

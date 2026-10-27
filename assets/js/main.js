@@ -116,6 +116,7 @@
       '<a class="' + act("alquiler").trim() + '" href="catalogo.html?modalidad=alquiler">Alquiler</a>' +
       '<a class="' + act("escoltas").trim() + '" href="escoltas.html">Escoltas</a>' +
       '<a class="' + act("blindaje").trim() + '" href="blindaje.html">Blindaje</a>' +
+      '<a class="' + act("nosotros").trim() + '" href="nosotros.html">Nosotros</a>' +
       '<a class="' + act("contacto").trim() + '" href="contacto.html">Contacto</a>' +
       '<a class="btn btn-gold btn-sm" href="' + esc(contactHref("Hola, quiero cotizar un vehículo blindado.")) + '">Cotizar</a>' +
       "</nav></div>";
@@ -145,7 +146,7 @@
     $("#footer").innerHTML =
       '<div class="wrap"><div class="foot-grid">' +
       '<div class="foot-brand"><img src="assets/img/logo.webp" alt="Armor Security"><p>Vehículos blindados en venta y alquiler por periodos. Catálogo completo, claro y a la medida.</p></div>' +
-      '<div><h4>Explorar</h4><ul><li><a href="catalogo.html">Catálogo</a></li><li><a href="catalogo.html?modalidad=venta">En venta</a></li><li><a href="catalogo.html?modalidad=alquiler">En alquiler</a></li><li><a href="escoltas.html">Escoltas</a></li><li><a href="blindaje.html">Niveles de blindaje</a></li></ul></div>' +
+      '<div><h4>Explorar</h4><ul><li><a href="catalogo.html">Catálogo</a></li><li><a href="catalogo.html?modalidad=venta">En venta</a></li><li><a href="catalogo.html?modalidad=alquiler">En alquiler</a></li><li><a href="escoltas.html">Escoltas</a></li><li><a href="blindaje.html">Niveles de blindaje</a></li><li><a href="nosotros.html">Nosotros</a></li></ul></div>' +
       '<div><h4>Contacto</h4><ul>' + contacto.join("") + "</ul></div>" +
       (redes.length ? "<div><h4>Síguenos</h4><ul>" + redes.join("") + "</ul></div>" : "<div></div>") +
       "</div>" +
@@ -342,6 +343,13 @@
   if (page === "catalogo") initCatalogo();
   if (page === "vehiculo") initVehiculo();
   if (page === "contacto") initContacto();
+  if (page === "home" || page === "nosotros") {
+    $$("[data-nos]").forEach((el) => { el.textContent = NOSOTROS[el.dataset.nos]; });
+    const pr = $("#principios");
+    if (pr) pr.innerHTML = NOSOTROS.principios.map((p, i) =>
+      '<div class="panel reveal"><span class="step-n">0' + (i + 1) + "</span><h3>" + esc(p.titulo) + "</h3><p>" + esc(p.texto) + "</p></div>"
+    ).join("");
+  }
   if (page === "escoltas") $("#escoltas").innerHTML = ESCOLTAS.map((e) =>
     '<div class="panel reveal"><span class="tag">' + esc(e.tag) + "</span><h3>" + esc(e.titulo) + "</h3><p>" + esc(e.texto) + "</p></div>"
   ).join("");
