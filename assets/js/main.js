@@ -69,6 +69,11 @@
     );
   }
   function nombre(v) { return v.marca + " " + v.linea; }
+  /* Nombre de un nivel: el de NIVELES si es de la lista; si no, lo escrito a mano ("Otro") */
+  function nivelNombre(n) {
+    const f = NIVELES.find((x) => x.id === n);
+    return f ? f.titulo : n;
+  }
   const ESTADOS = { reservado: "Reservado", vendido: "Vendido", alquilado: "Alquilado" };
   function estadoBadge(v) {
     return ESTADOS[v.estado] ? '<span class="badge badge-estado">' + ESTADOS[v.estado] + "</span>" : "";
@@ -90,7 +95,7 @@
       '<div class="card-body">' +
       '<span class="card-ref">REF ' + esc(v.ref) + " · " + esc(v.tipo).toUpperCase() + "</span>" +
       '<h3><a href="vehiculo.html?id=' + esc(v.id) + '"><small>' + esc(v.marca) + "</small>" + esc(v.linea) + "</a></h3>" +
-      '<span class="level">' + ICON_SHIELD + "Blindaje nivel " + esc(v.nivel) + "</span>" +
+      '<span class="level">' + ICON_SHIELD + (NIVELES.some((x) => x.id === v.nivel) ? "Blindaje " : "") + esc(nivelNombre(v.nivel)) + "</span>" +
       '<div class="specs">' + specs.map((s) => "<span>" + esc(s) + "</span>").join("") + "</div>" +
       '<div class="prices">' + rows.join("") + "</div>" +
       '<a class="btn btn-sm" href="vehiculo.html?id=' + esc(v.id) + '">Ver ficha</a>' +
@@ -212,7 +217,11 @@
       $(id).innerHTML = '<option value="">' + label + "</option>" + list.map((x) => '<option value="' + esc(x) + '">' + esc(x) + "</option>").join("");
     };
     fill("#f-tipo", uniq("tipo"), "Todos los tipos");
-    fill("#f-nivel", NIVELES.map((n) => n.id), "Todo nivel");
+    /* Niveles de la lista + los que se hayan escrito a mano en algún vehículo */
+    const extra = uniq("nivel").filter((n) => !NIVELES.some((x) => x.id === n));
+    $("#f-nivel").innerHTML = '<option value="">Todo nivel</option>' +
+      NIVELES.map((n) => '<option value="' + esc(n.id) + '">' + esc(n.titulo) + "</option>").join("") +
+      extra.map((n) => '<option value="' + esc(n) + '">' + esc(n) + "</option>").join("");
     fill("#f-marca", uniq("marca"), "Todas las marcas");
     $("#f-tipo").value = state.tipo;
     $("#f-nivel").value = state.nivel;
@@ -273,7 +282,7 @@
     const datos =
       row("Referencia", v.ref) + row("Tipo", v.tipo) + row("Año", v.anio) + row("Color", v.color) +
       row("Transmisión", v.transmision) + row("Combustible", v.combustible) + row("Cilindraje", v.cilindraje) +
-      row("Pasajeros", v.pasajeros) + row("Nivel de blindaje", v.nivel);
+      row("Pasajeros", v.pasajeros) + row("Nivel de blindaje", nivelNombre(v.nivel));
 
     const tarifaRows = v.modalidades.includes("alquiler")
       ? '<div class="box"><h2>Alquiler <span>Por periodo</span></h2><dl class="rows">' +
@@ -302,7 +311,9 @@
       "<h1><small>" + esc(v.marca) + "</small>" + esc(v.linea) + " " + esc(v.anio) + "</h1></div>" +
       ventaRow + tarifaRows +
       '<div class="box"><h2>Ficha técnica <span>' + esc(v.ref) + "</span></h2><dl class=\"rows\">" + datos + "</dl></div>" +
-      (nv ? '<div class="box"><h2>Blindaje <span>Nivel ' + esc(nv.id) + "</span></h2><dl class=\"rows\"><div><dt>Protección</dt><dd>" + esc(nv.resumen) + '</dd></div></dl><p style="padding:0 22px 18px;color:var(--muted);font-size:15px">' + esc(nv.detalle) + "</p></div>" : "") +
+      (nv
+        ? '<div class="box"><h2>Blindaje <span>' + esc(nv.titulo) + "</span></h2><dl class=\"rows\"><div><dt>Protección</dt><dd>" + esc(nv.resumen) + '</dd></div></dl><p style="padding:0 22px 18px;color:var(--muted);font-size:15px">' + esc(nv.detalle) + "</p></div>"
+        : '<div class="box"><h2>Blindaje <span>Tipo</span></h2><dl class="rows"><div><dt>Blindaje</dt><dd>' + esc(v.nivel) + "</dd></div></dl></div>") +
       '<div class="veh-cta">' + ctas + "</div></div></div>";
 
     $$(".thumbs button").forEach((b) => b.addEventListener("click", () => {
@@ -378,6 +389,11 @@
     const pr = $("#principios");
     if (pr) pr.innerHTML = NOSOTROS.principios.map((p, i) =>
       '<div class="panel reveal"><span class="step-n">0' + (i + 1) + "</span><h3>" + esc(p.titulo) + "</h3><p>" + esc(p.texto) + "</p></div>"
+    ).join("");
+  }
+  if (page === "blindaje") {
+    $("#niveles-tabla").innerHTML = NIVELES.map((n) =>
+      '<tr><td>' + esc(n.id) + "</td><td><b>" + esc(n.resumen) + "</b>" + esc(n.detalle) + "</td><td>" + esc(n.uso) + "</td></tr>"
     ).join("");
   }
   if (page === "escoltas") $("#escoltas").innerHTML = ESCOLTAS.map((e) =>

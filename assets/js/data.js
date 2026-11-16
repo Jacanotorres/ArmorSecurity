@@ -18,26 +18,30 @@ const SITE = {
   linkedin: ""
 };
 
-/* Niveles de blindaje (referencia general; el nivel real y su
-   certificación se indican en la ficha de cada vehículo). */
+/* Niveles de blindaje que maneja Armor Security. En el panel también se puede
+   escribir otro tipo manualmente ("Otro"). El nivel exacto y su certificación
+   se indican en la ficha de cada vehículo. */
 const NIVELES = [
   {
-    id: "III-A",
-    titulo: "Nivel III-A",
+    id: "2",
+    titulo: "Nivel 2",
     resumen: "Protección contra armas cortas",
-    detalle: "Resiste disparos de armas de mano de alto calibre, incluidos .44 Magnum. Es el nivel más usado en vehículos de uso ejecutivo y familiar."
+    detalle: "El nivel base de nuestro blindaje, pensado para el uso diario y los traslados urbanos.",
+    uso: "Uso diario y traslados urbanos."
   },
   {
-    id: "III",
-    titulo: "Nivel III",
-    resumen: "Protección contra fusiles",
-    detalle: "Resiste disparos de fusil de 7,62 mm con munición de camisa completa. Para escenarios de riesgo alto."
+    id: "2 plus",
+    titulo: "Nivel 2 Plus",
+    resumen: "Protección reforzada",
+    detalle: "Un escalón por encima del nivel 2, con mayor resistencia para quien tiene más exposición.",
+    uso: "Uso ejecutivo y desplazamientos con mayor exposición."
   },
   {
-    id: "IV",
-    titulo: "Nivel IV",
-    resumen: "Protección contra munición perforante",
-    detalle: "Resiste munición de fusil perforante .30-06. El mayor nivel de protección civil, con más peso y blindaje en todo el habitáculo."
+    id: "3",
+    titulo: "Nivel 3",
+    resumen: "Mayor nivel de protección",
+    detalle: "El nivel más alto de nuestro blindaje, para escenarios de mayor riesgo.",
+    uso: "Riesgo alto y desplazamientos por carretera."
   }
 ];
 
@@ -79,7 +83,7 @@ const VEHICULOS = [
   {
     id: "as-001", ref: "AS-001",
     marca: "Toyota", linea: "Land Cruiser 300", anio: 2023, tipo: "SUV",
-    nivel: "IV", modalidades: ["venta"],
+    nivel: "3", modalidades: ["venta"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Negro", transmision: "Automática", combustible: "Diésel", cilindraje: "3.3 L",
     pasajeros: 5, fotos: [], destacado: true, ejemplo: true,
@@ -88,7 +92,7 @@ const VEHICULOS = [
   {
     id: "as-002", ref: "AS-002",
     marca: "Toyota", linea: "Prado TXL", anio: 2022, tipo: "SUV",
-    nivel: "III-A", modalidades: ["venta", "alquiler"],
+    nivel: "2 plus", modalidades: ["venta", "alquiler"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Gris", transmision: "Automática", combustible: "Diésel", cilindraje: "2.8 L",
     pasajeros: 7, fotos: [], destacado: true, ejemplo: true,
@@ -97,7 +101,7 @@ const VEHICULOS = [
   {
     id: "as-003", ref: "AS-003",
     marca: "Chevrolet", linea: "Suburban", anio: 2021, tipo: "SUV",
-    nivel: "III-A", modalidades: ["alquiler"],
+    nivel: "2 plus", modalidades: ["alquiler"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Negro", transmision: "Automática", combustible: "Gasolina", cilindraje: "5.3 L",
     pasajeros: 7, fotos: [], destacado: true, ejemplo: true,
@@ -106,7 +110,7 @@ const VEHICULOS = [
   {
     id: "as-004", ref: "AS-004",
     marca: "Toyota", linea: "Hilux", anio: 2022, tipo: "Camioneta",
-    nivel: "III-A", modalidades: ["venta"],
+    nivel: "2", modalidades: ["venta"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Blanco", transmision: "Automática", combustible: "Diésel", cilindraje: "2.8 L",
     pasajeros: 5, fotos: [], destacado: false, ejemplo: true,
@@ -115,7 +119,7 @@ const VEHICULOS = [
   {
     id: "as-005", ref: "AS-005",
     marca: "Mercedes-Benz", linea: "Clase E", anio: 2020, tipo: "Sedán",
-    nivel: "III", modalidades: ["venta", "alquiler"],
+    nivel: "3", modalidades: ["venta", "alquiler"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Negro", transmision: "Automática", combustible: "Gasolina", cilindraje: "2.0 L",
     pasajeros: 5, fotos: [], destacado: false, ejemplo: true,
@@ -124,7 +128,7 @@ const VEHICULOS = [
   {
     id: "as-006", ref: "AS-006",
     marca: "Toyota", linea: "Hiace", anio: 2022, tipo: "Van",
-    nivel: "III-A", modalidades: ["alquiler"],
+    nivel: "2", modalidades: ["alquiler"],
     precioVenta: null, tarifas: { dia: null, semana: null, mes: null },
     color: "Blanco", transmision: "Manual", combustible: "Diésel", cilindraje: "2.8 L",
     pasajeros: 10, fotos: [], destacado: false, ejemplo: true,

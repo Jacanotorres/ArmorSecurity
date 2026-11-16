@@ -91,6 +91,9 @@
             </select>
           </label>
           <label class="lbl">Nivel de blindaje <select class="field" id="v-nivel" required></select></label>
+          <label class="lbl" id="lbl-nivel-otro" hidden>Escribe el tipo de blindaje
+            <input class="field" id="v-nivel-otro" maxlength="60" placeholder="Ej: Nivel 3-A, blindaje ligero">
+          </label>
           <label class="lbl">Estado
             <select class="field" id="v-estado">
               <option value="disponible">Disponible</option>
@@ -232,7 +235,16 @@
   }));
 
   /* Niveles de blindaje desde data.js */
-  $("#v-nivel").innerHTML = '<option value="">Elige</option>' + NIVELES.map((n) => '<option value="' + esc(n.id) + '">Nivel ' + esc(n.id) + " — " + esc(n.resumen) + "</option>").join("");
+  $("#v-nivel").innerHTML = '<option value="">Elige</option>' +
+    NIVELES.map((n) => '<option value="' + esc(n.id) + '">' + esc(n.titulo) + " — " + esc(n.resumen) + "</option>").join("") +
+    '<option value="__otro">Otro (escribir manualmente)</option>';
+  const nivelNombre = (n) => { const f = NIVELES.find((x) => x.id === n); return f ? f.titulo : n; };
+  function syncNivelOtro() {
+    const otro = $("#v-nivel").value === "__otro";
+    $("#lbl-nivel-otro").hidden = !otro;
+    $("#v-nivel-otro").required = otro;
+  }
+  $("#v-nivel").addEventListener("change", syncNivelOtro);
 
   /* =========================================================
      VEHÍCULOS
@@ -279,7 +291,7 @@
       "<tr>" +
       '<td data-label="Foto">' + (v.fotos[0] ? '<img class="thumb" src="' + esc(v.fotos[0]) + '" alt="" loading="lazy">' : '<span class="thumb thumb-empty">SIN FOTO</span>') + "</td>" +
       '<td class="cell-main"><div class="vt"><small>' + esc(v.ref) + "</small>" + esc(v.marca) + " " + esc(v.linea) + " " + esc(v.anio) + "</div></td>" +
-      '<td data-label="Tipo · Nivel">' + esc(v.tipo) + " · " + esc(v.nivel) + "</td>" +
+      '<td data-label="Tipo · Nivel">' + esc(v.tipo) + " · " + esc(nivelNombre(v.nivel)) + "</td>" +
       '<td data-label="Modalidad"><div class="pills">' +
         (v.modalidades.includes("venta") ? '<span class="pill">Venta</span>' : "") +
         (v.modalidades.includes("alquiler") ? '<span class="pill">Alquiler</span>' : "") +
@@ -347,7 +359,11 @@
     $("#v-linea").value = v ? v.linea : "";
     $("#v-anio").value = v ? v.anio : "";
     $("#v-tipo").value = v ? v.tipo : "";
-    $("#v-nivel").value = v ? v.nivel : "";
+    /* Si el nivel no es de la lista, se abre "Otro" con lo que se escribió */
+    const enLista = v && NIVELES.some((n) => n.id === v.nivel);
+    $("#v-nivel").value = !v ? "" : enLista ? v.nivel : "__otro";
+    $("#v-nivel-otro").value = v && !enLista ? v.nivel : "";
+    syncNivelOtro();
     $("#v-estado").value = v && !duplicate ? v.estado : "disponible";
     $("#v-venta").checked = v ? v.modalidades.includes("venta") : true;
     $("#v-alquiler").checked = v ? v.modalidades.includes("alquiler") : false;
@@ -391,7 +407,8 @@
     const anio = parseInt($("#v-anio").value, 10);
     const payload = {
       marca: marca, linea: linea, anio: anio,
-      tipo: $("#v-tipo").value, nivel: $("#v-nivel").value,
+      tipo: $("#v-tipo").value,
+      nivel: $("#v-nivel").value === "__otro" ? $("#v-nivel-otro").value.trim() : $("#v-nivel").value,
       estado: $("#v-estado").value,
       en_venta: venta, en_alquiler: alquiler,
       destacado: $("#v-destacado").checked,
