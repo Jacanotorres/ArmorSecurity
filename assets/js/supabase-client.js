@@ -6,8 +6,8 @@
    llave de otro cliente: sus solicitudes y vehículos terminarían en esa base).
    Mientras estas dos constantes estén vacías, el sitio funciona sin base de
    datos y muestra los vehículos de muestra de data.js. */
-const SUPABASE_URL = "";
-const SUPABASE_PUBLIC_KEY = "";
+const SUPABASE_URL = "https://tritlpfisiuiiagtyana.supabase.co";
+const SUPABASE_PUBLIC_KEY = "sb_publishable_fTil-WMhHhzU_mFVfIyGLQ_Vfi-bud9";
 
 const supabaseClient = (SUPABASE_URL && SUPABASE_PUBLIC_KEY && typeof supabase !== "undefined")
   ? supabase.createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY)
