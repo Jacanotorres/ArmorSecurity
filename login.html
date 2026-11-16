@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión — Armor Security</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="login-page">
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="brand" href="index.html" aria-label="Armor Security, inicio">
+      <img src="assets/img/logo.webp" alt="" width="36" height="48">
+      <span class="brand-name">Armor <b>Security</b></span>
+    </a>
+    <a class="btn btn-sm" href="index.html">Ver sitio</a>
+  </div>
+</header>
+
+<main class="login-wrap">
+  <div class="login-card">
+    <div class="kicker">Acceso interno</div>
+    <h1>Iniciar sesión</h1>
+    <p class="sub">Para administradores y asesores. Si eres visitante, no necesitas cuenta para ver el sitio.</p>
+    <form id="login-form">
+      <label class="lbl">Correo
+        <input class="field" id="l-email" type="email" required autocomplete="username">
+      </label>
+      <label class="lbl">Contraseña
+        <span class="pw">
+          <input class="field" id="l-password" type="password" required autocomplete="current-password">
+          <button type="button" id="l-toggle" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="i-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="i-hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17.4 17.4 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </span>
+      </label>
+      <p class="err" id="l-error" role="alert"></p>
+      <button class="btn btn-gold" id="l-submit" type="submit">Entrar</button>
+    </form>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/js/supabase-client.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+  (async function () {
+    var errEl = document.getElementById("l-error");
+
+    if (!supabaseClient) {
+      errEl.textContent = "El panel aún no está conectado a la base de datos.";
+      document.getElementById("l-submit").disabled = true;
+      return;
+    }
+
+    /* Si ya hay sesión, ir directo al panel */
+    if (await getCurrentProfile()) { window.location.href = "panel.html"; return; }
+
+    /* Ojito: muestra u oculta la contraseña */
+    var pw = document.getElementById("l-password");
+    var tg = document.getElementById("l-toggle");
+    tg.addEventListener("click", function () {
+      var show = pw.type === "password";
+      pw.type = show ? "text" : "password";
+      tg.setAttribute("aria-pressed", show);
+      tg.setAttribute("aria-label", show ? "Ocultar contraseña" : "Mostrar contraseña");
+      tg.querySelector(".i-show").hidden = show;
+      tg.querySelector(".i-hide").hidden = !show;
+      pw.focus();
+    });
+
+    var btn = document.getElementById("l-submit");
+    document.getElementById("login-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      errEl.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Entrando...";
+
+      var res = await signIn(document.getElementById("l-email").value, pw.value);
+      if (res.error) {
+        errEl.textContent = "Correo o contraseña incorrectos.";
+      } else if (!(await getCurrentProfile())) {
+        errEl.textContent = "Tu cuenta no tiene un rol asignado. Contacta al administrador.";
+        await supabaseClient.auth.signOut();
+      } else {
+        window.location.href = "panel.html";
+        return;
+      }
+      btn.disabled = false;
+      btn.textContent = "Entrar";
+    });
+  })();
+</script>
+</body>
+</html>

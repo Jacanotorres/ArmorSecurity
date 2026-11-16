@@ -32,9 +32,14 @@
 
     <form class="form" id="c-form">
       <div class="kicker">Formulario</div>
-      <label>Nombre
-        <input class="field" name="nombre" required autocomplete="name">
-      </label>
+      <div class="two">
+        <label>Nombre
+          <input class="field" name="nombre" required autocomplete="name" maxlength="200">
+        </label>
+        <label>Celular / WhatsApp
+          <input class="field" name="celular" type="tel" required autocomplete="tel" maxlength="40" placeholder="Ej: 300 123 4567">
+        </label>
+      </div>
       <div class="two">
         <label>Me interesa
           <select class="field" name="interes">
@@ -58,7 +63,7 @@
         <select class="field" name="vehiculo" id="c-veh"></select>
       </label>
       <label>Mensaje
-        <textarea class="field" name="mensaje" placeholder="Fechas, ciudad, número de pasajeros, nivel de blindaje…"></textarea>
+        <textarea class="field" name="mensaje" maxlength="2000" placeholder="Fechas, ciudad, número de pasajeros, nivel de blindaje…"></textarea>
       </label>
       <button class="btn btn-gold" type="submit">Enviar solicitud</button>
       <p class="form-note" id="c-note" role="status"></p>
@@ -67,7 +72,10 @@
 </main>
 
 <footer class="site-footer" id="footer"></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="assets/js/supabase-client.js"></script>
 <script src="assets/js/data.js"></script>
+<script src="assets/js/db.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

@@ -10,6 +10,9 @@
   const page = document.body.dataset.page || "";
   const params = new URLSearchParams(location.search);
 
+  /* Lista de vehículos: de Supabase si hay base de datos; si no, los de muestra de data.js */
+  let VEH = typeof VEHICULOS !== "undefined" ? VEHICULOS : [];
+
   /* ---------- Contacto ---------- */
   function waNumber() {
     let n = (SITE.whatsapp || "").replace(/\D/g, "");
@@ -66,6 +69,10 @@
     );
   }
   function nombre(v) { return v.marca + " " + v.linea; }
+  const ESTADOS = { reservado: "Reservado", vendido: "Vendido", alquilado: "Alquilado" };
+  function estadoBadge(v) {
+    return ESTADOS[v.estado] ? '<span class="badge badge-estado">' + ESTADOS[v.estado] + "</span>" : "";
+  }
 
   function vehCard(v) {
     const img = v.fotos && v.fotos.length
@@ -76,9 +83,9 @@
     if (v.modalidades.includes("alquiler")) rows.push('<div><span class="k">Alquiler / día</span><b>' + money(v.tarifas && v.tarifas.dia) + "</b></div>");
     const specs = [v.anio, v.pasajeros ? v.pasajeros + " pasajeros" : "", v.transmision].filter(Boolean);
     return (
-      '<article class="card reveal">' +
+      '<article class="card reveal' + (v.estado === "vendido" ? " card-off" : "") + '">' +
       '<a class="card-img" href="vehiculo.html?id=' + esc(v.id) + '" aria-label="Ver ' + esc(nombre(v)) + '">' +
-      '<div class="card-badges">' + badgesHTML(v) + (v.ejemplo ? '<span class="badge badge-demo">Muestra</span>' : "") + "</div>" +
+      '<div class="card-badges">' + badgesHTML(v) + estadoBadge(v) + (v.ejemplo ? '<span class="badge badge-demo">Muestra</span>' : "") + "</div>" +
       img + "</a>" +
       '<div class="card-body">' +
       '<span class="card-ref">REF ' + esc(v.ref) + " · " + esc(v.tipo).toUpperCase() + "</span>" +
@@ -176,8 +183,10 @@
 
   /* ---------- Inicio ---------- */
   function initHome() {
-    const feat = VEHICULOS.filter((v) => v.destacado).slice(0, 3);
-    $("#featured").innerHTML = (feat.length ? feat : VEHICULOS.slice(0, 3)).map(vehCard).join("");
+    const feat = VEH.filter((v) => v.destacado && v.estado !== "vendido").slice(0, 3);
+    $("#featured").innerHTML = VEH.length
+      ? (feat.length ? feat : VEH.slice(0, 3)).map(vehCard).join("")
+      : '<div class="empty" style="grid-column:1/-1"><h3>Catálogo en preparación</h3><p>Muy pronto verás aquí nuestras unidades. Mientras tanto, escríbenos y te contamos qué tenemos.</p></div>';
     $("#niveles").innerHTML = NIVELES.map((n) =>
       '<div class="panel reveal"><span class="tag">Blindaje</span><h3>' + esc(n.titulo) + "</h3><p><strong>" + esc(n.resumen) + ".</strong> " + esc(n.detalle) + "</p></div>"
     ).join("");
@@ -198,7 +207,7 @@
       marca: params.get("marca") || "",
       q: params.get("q") || ""
     };
-    const uniq = (k) => Array.from(new Set(VEHICULOS.map((v) => v[k]).filter(Boolean))).sort();
+    const uniq = (k) => Array.from(new Set(VEH.map((v) => v[k]).filter(Boolean))).sort();
     const fill = (id, list, label) => {
       $(id).innerHTML = '<option value="">' + label + "</option>" + list.map((x) => '<option value="' + esc(x) + '">' + esc(x) + "</option>").join("");
     };
@@ -213,14 +222,14 @@
     function paint() {
       $$(".tabs button").forEach((b) => b.classList.toggle("on", b.dataset.m === state.modalidad));
       const q = state.q.trim().toLowerCase();
-      const list = VEHICULOS.filter((v) =>
+      const list = VEH.filter((v) =>
         (state.modalidad === "todos" || v.modalidades.includes(state.modalidad)) &&
         (!state.tipo || v.tipo === state.tipo) &&
         (!state.nivel || v.nivel === state.nivel) &&
         (!state.marca || v.marca === state.marca) &&
         (!q || (v.marca + " " + v.linea + " " + v.anio + " " + v.ref).toLowerCase().includes(q))
       );
-      $("#count").innerHTML = "<b>" + list.length + "</b> " + (list.length === 1 ? "unidad disponible" : "unidades disponibles");
+      $("#count").innerHTML = "<b>" + list.length + "</b> " + (list.length === 1 ? "unidad en el catálogo" : "unidades en el catálogo");
       $("#grid").innerHTML = list.length
         ? list.map(vehCard).join("")
         : '<div class="empty" style="grid-column:1/-1"><h3>Sin resultados</h3><p>Prueba quitando algún filtro, o cuéntanos qué necesitas y lo conseguimos.</p><p style="margin-top:20px"><a class="btn btn-gold" href="' + esc(contactHref("Hola, busco un vehículo blindado que no veo en el catálogo.")) + '">Pedir una cotización</a></p></div>';
@@ -245,7 +254,7 @@
   /* ---------- Ficha ---------- */
   function initVehiculo() {
     const root = $("#veh-root");
-    const v = VEHICULOS.find((x) => x.id === params.get("id"));
+    const v = VEH.find((x) => x.id === params.get("id"));
     if (!v) {
       root.innerHTML = '<div class="empty" style="margin:64px 0"><h3>Vehículo no encontrado</h3><p>Puede que ya no esté disponible.</p><p style="margin-top:20px"><a class="btn btn-gold" href="catalogo.html">Ver catálogo</a></p></div>';
       return;
@@ -277,8 +286,11 @@
       : "";
 
     const base = "Hola, me interesa el " + nombre(v) + " " + v.anio + " (REF " + v.ref + ")";
-    const ctas =
-      (v.modalidades.includes("venta") ? '<a class="btn btn-gold" href="' + esc(contactHref(base + " para compra. ¿Me comparten información?")) + '">Cotizar compra</a>' : "") +
+    const vendido = v.estado === "vendido";
+    const ctas = vendido
+      ? '<p class="note" style="margin:0">Este vehículo ya fue vendido. Mira otras unidades del catálogo o cuéntanos qué buscas.</p>' +
+        '<a class="btn btn-gold" href="catalogo.html">Ver catálogo</a>'
+      : (v.modalidades.includes("venta") ? '<a class="btn btn-gold" href="' + esc(contactHref(base + " para compra. ¿Me comparten información?")) + '">Cotizar compra</a>' : "") +
       (v.modalidades.includes("alquiler") ? '<a class="btn" href="' + esc(contactHref(base + " para alquiler. Necesito el vehículo del ___ al ___.")) + '">Cotizar alquiler</a>' : "");
 
     root.innerHTML =
@@ -286,7 +298,7 @@
       '<div class="veh"><div>' +
       '<div class="gallery-main">' + main + "</div>" + thumbs +
       (v.descripcion ? '<p class="veh-desc">' + esc(v.descripcion) + "</p>" : "") +
-      '</div><div><div class="veh-title"><div class="badges">' + badgesHTML(v) + (v.ejemplo ? '<span class="badge badge-demo">Ficha de muestra</span>' : "") + "</div>" +
+      '</div><div><div class="veh-title"><div class="badges">' + badgesHTML(v) + estadoBadge(v) + (v.ejemplo ? '<span class="badge badge-demo">Ficha de muestra</span>' : "") + "</div>" +
       "<h1><small>" + esc(v.marca) + "</small>" + esc(v.linea) + " " + esc(v.anio) + "</h1></div>" +
       ventaRow + tarifaRows +
       '<div class="box"><h2>Ficha técnica <span>' + esc(v.ref) + "</span></h2><dl class=\"rows\">" + datos + "</dl></div>" +
@@ -313,36 +325,54 @@
 
     const sel = $("#c-veh");
     sel.innerHTML = '<option value="">Aún no lo sé</option>' +
-      VEHICULOS.map((v) => '<option value="' + esc(v.ref) + '">' + esc(v.ref + " · " + nombre(v) + " " + v.anio) + "</option>").join("");
-    const pre = params.get("id") && VEHICULOS.find((v) => v.id === params.get("id"));
+      VEH.map((v) => '<option value="' + esc(v.ref) + '">' + esc(v.ref + " · " + nombre(v) + " " + v.anio) + "</option>").join("");
+    const pre = params.get("id") && VEH.find((v) => v.id === params.get("id"));
     if (pre) sel.value = pre.ref;
 
-    $("#c-form").addEventListener("submit", (e) => {
+    $("#c-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = e.target;
+      /* Guarda la solicitud en el panel (si hay base de datos); no frena el envío por WhatsApp si falla */
+      if (typeof supabaseClient !== "undefined" && supabaseClient) {
+        const { error } = await supabaseClient.from("solicitudes").insert({
+          nombre: f.nombre.value.trim(),
+          celular: f.celular.value.trim(),
+          interes: f.interes.value,
+          periodo: f.periodo.value || null,
+          vehiculo_ref: f.vehiculo.value || null,
+          mensaje: f.mensaje.value.trim() || null
+        });
+        if (error) console.error("No se pudo guardar la solicitud:", error);
+      }
       const msg =
-        "Hola, soy " + f.nombre.value + ". Me interesa: " + f.interes.value +
+        "Hola, soy " + f.nombre.value + " (" + f.celular.value + "). Me interesa: " + f.interes.value +
         (f.vehiculo.value ? " (vehículo " + f.vehiculo.value + ")" : "") +
         (f.periodo.value ? ". Periodo: " + f.periodo.value : "") +
         (f.mensaje.value ? ". " + f.mensaje.value : "");
       const note = $("#c-note");
       if (waNumber()) {
         window.open(contactHref(msg), "_blank", "noopener");
-        note.textContent = "Abrimos WhatsApp con tu mensaje listo para enviar.";
+        note.textContent = "Recibimos tu solicitud. Abrimos WhatsApp con tu mensaje listo para enviar.";
       } else if (SITE.correo) {
         location.href = "mailto:" + SITE.correo + "?subject=" + encodeURIComponent("Consulta Armor Security") + "&body=" + encodeURIComponent(msg);
       } else {
-        note.textContent = "Estamos configurando los canales de contacto. Vuelve a intentarlo en un momento.";
+        note.textContent = (typeof supabaseClient !== "undefined" && supabaseClient)
+          ? "¡Recibimos tu solicitud! Te contactaremos muy pronto."
+          : "Estamos configurando los canales de contacto. Vuelve a intentarlo en un momento.";
       }
     });
   }
 
   /* ---------- Arranque ---------- */
+  /* Con base de datos, el catálogo viene de Supabase (disponibles primero) */
+  async function cargarVehiculos() {
+    if (typeof supabaseClient === "undefined" || !supabaseClient) return;
+    const lista = (await fetchVehicles()) || [];
+    const rank = (v) => (v.estado === "disponible" ? 0 : v.estado === "vendido" ? 2 : 1);
+    VEH = lista.slice().sort((a, b) => rank(a) - rank(b));
+  }
+
   renderChrome();
-  if (page === "home") initHome();
-  if (page === "catalogo") initCatalogo();
-  if (page === "vehiculo") initVehiculo();
-  if (page === "contacto") initContacto();
   if (page === "home" || page === "nosotros") {
     $$("[data-nos]").forEach((el) => { el.textContent = NOSOTROS[el.dataset.nos]; });
     const pr = $("#principios");
@@ -354,4 +384,14 @@
     '<div class="panel reveal"><span class="tag">' + esc(e.tag) + "</span><h3>" + esc(e.titulo) + "</h3><p>" + esc(e.texto) + "</p></div>"
   ).join("");
   reveal();
+
+  if (["home", "catalogo", "vehiculo", "contacto"].includes(page)) {
+    cargarVehiculos().then(() => {
+      if (page === "home") initHome();
+      if (page === "catalogo") initCatalogo();
+      if (page === "vehiculo") initVehiculo();
+      if (page === "contacto") initContacto();
+      reveal();
+    });
+  }
 })();

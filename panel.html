@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel — Armor Security</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#070707">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="panel-page">
+
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="brand" href="index.html" aria-label="Armor Security, inicio">
+      <img src="assets/img/logo.webp" alt="" width="36" height="48">
+      <span class="brand-name">Armor <b>Security</b></span>
+    </a>
+    <div class="header-actions">
+      <a class="btn btn-sm" href="index.html" target="_blank" rel="noopener">Ver sitio</a>
+      <button class="btn btn-gold btn-sm" id="btn-logout"><span class="only-desktop">Cerrar sesión</span><span class="only-mobile">Salir</span></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap panel-main">
+  <div class="panel-top">
+    <div>
+      <div class="kicker">Panel interno</div>
+      <h1>Administrar el catálogo</h1>
+    </div>
+    <p class="panel-who">Sesión de <strong id="who-name">—</strong> (<span id="who-role">—</span>)</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="st-total">0</b><span>Vehículos</span></div>
+    <div class="stat"><b id="st-disp">0</b><span>Disponibles</span></div>
+    <div class="stat"><b id="st-venta">0</b><span>En venta</span></div>
+    <div class="stat"><b id="st-alq">0</b><span>En alquiler</span></div>
+    <div class="stat"><b id="st-sol">0</b><span>Solicitudes nuevas</span></div>
+  </div>
+
+  <div class="tabs-p" role="tablist">
+    <button class="on" data-tab="vehiculos" role="tab">Vehículos</button>
+    <button data-tab="solicitudes" role="tab">Solicitudes <span class="tab-badge" id="sol-badge" hidden></span></button>
+  </div>
+
+  <!-- ===================== VEHÍCULOS ===================== -->
+  <section class="tab-sec on" id="tab-vehiculos">
+    <div class="pcard">
+      <div class="toolbar">
+        <div class="left">
+          <input class="field search" id="f-q" type="search" placeholder="Buscar marca, línea o referencia" aria-label="Buscar">
+          <select class="field" id="f-estado" aria-label="Estado">
+            <option value="">Todos los estados</option>
+            <option value="disponible">Disponibles</option>
+            <option value="reservado">Reservados</option>
+            <option value="alquilado">Alquilados</option>
+            <option value="vendido">Vendidos</option>
+            <option value="oculto">Ocultos</option>
+          </select>
+          <select class="field" id="f-mod" aria-label="Modalidad">
+            <option value="">Venta y alquiler</option>
+            <option value="venta">Solo en venta</option>
+            <option value="alquiler">Solo en alquiler</option>
+          </select>
+        </div>
+        <button class="btn btn-gold btn-sm" id="btn-new">+ Agregar vehículo</button>
+      </div>
+      <table class="ptable">
+        <thead><tr><th>Foto</th><th>Vehículo</th><th>Tipo · Nivel</th><th>Modalidad</th><th>Precio</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="v-tbody"><tr><td colspan="7" class="empty-p">Cargando...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="pcard" id="form-card" hidden>
+      <h3 id="form-title" style="margin-bottom:20px">Agregar vehículo</h3>
+      <form id="v-form">
+        <h4>Identificación</h4>
+        <div class="fgrid">
+          <label class="lbl">Marca <input class="field" id="v-marca" required maxlength="60" placeholder="Ej: Toyota"></label>
+          <label class="lbl">Línea <input class="field" id="v-linea" required maxlength="80" placeholder="Ej: Land Cruiser 300"></label>
+          <label class="lbl">Año <input class="field" id="v-anio" type="number" required min="1950" max="2100" placeholder="Ej: 2023"></label>
+          <label class="lbl">Tipo
+            <select class="field" id="v-tipo" required>
+              <option value="">Elige</option><option>SUV</option><option>Camioneta</option><option>Sedán</option><option>Van</option>
+            </select>
+          </label>
+          <label class="lbl">Nivel de blindaje <select class="field" id="v-nivel" required></select></label>
+          <label class="lbl">Estado
+            <select class="field" id="v-estado">
+              <option value="disponible">Disponible</option>
+              <option value="reservado">Reservado</option>
+              <option value="alquilado">Alquilado</option>
+              <option value="vendido">Vendido</option>
+              <option value="oculto">Oculto (no se ve en el sitio)</option>
+            </select>
+          </label>
+        </div>
+
+        <h4>Venta y alquiler</h4>
+        <div class="checks">
+          <label class="chk"><input type="checkbox" id="v-venta"> En venta</label>
+          <label class="chk"><input type="checkbox" id="v-alquiler"> En alquiler</label>
+          <label class="chk"><input type="checkbox" id="v-destacado"> Destacado en el inicio</label>
+        </div>
+        <div class="sub-block" id="blk-venta" hidden style="margin-top:14px">
+          <div class="fgrid">
+            <label class="lbl">Precio de venta (pesos)
+              <input class="field" id="v-precio" type="number" min="0" placeholder="Vacío = “Consultar”">
+              <span class="hint" id="h-precio"></span>
+            </label>
+          </div>
+        </div>
+        <div class="sub-block" id="blk-alquiler" hidden style="margin-top:14px">
+          <div class="fgrid">
+            <label class="lbl">Tarifa por día
+              <input class="field" id="v-dia" type="number" min="0" placeholder="Vacío = “Consultar”">
+              <span class="hint" id="h-dia"></span>
+            </label>
+            <label class="lbl">Tarifa por semana
+              <input class="field" id="v-semana" type="number" min="0" placeholder="Vacío = “Consultar”">
+              <span class="hint" id="h-semana"></span>
+            </label>
+            <label class="lbl">Tarifa por mes
+              <input class="field" id="v-mes" type="number" min="0" placeholder="Vacío = “Consultar”">
+              <span class="hint" id="h-mes"></span>
+            </label>
+          </div>
+        </div>
+
+        <h4>Ficha técnica</h4>
+        <div class="fgrid">
+          <label class="lbl">Color <input class="field" id="v-color" maxlength="40" placeholder="Ej: Negro"></label>
+          <label class="lbl">Transmisión
+            <select class="field" id="v-trans"><option value="">Elige</option><option>Automática</option><option>Mecánica</option></select>
+          </label>
+          <label class="lbl">Combustible
+            <select class="field" id="v-comb"><option value="">Elige</option><option>Gasolina</option><option>Diésel</option><option>Híbrido</option><option>Eléctrico</option></select>
+          </label>
+          <label class="lbl">Cilindraje <input class="field" id="v-cil" maxlength="30" placeholder="Ej: 3.3 L"></label>
+          <label class="lbl">Pasajeros <input class="field" id="v-pas" type="number" min="1" max="30" placeholder="Ej: 5"></label>
+          <label class="lbl full">Descripción
+            <textarea class="field" id="v-desc" rows="6" maxlength="4000" placeholder="Origen del blindaje, materiales, accesorios, estado y todo lo que quieras contar."></textarea>
+          </label>
+        </div>
+
+        <div class="acts" style="margin-top:24px">
+          <button type="submit" class="btn btn-gold" id="btn-save">Guardar</button>
+          <button type="button" class="btn" id="btn-cancel">Cancelar</button>
+        </div>
+        <p class="note-p" id="photos-hint">Al guardar aparecerá aquí abajo la sección para subir las fotos.</p>
+      </form>
+
+      <div id="photos-wrap" hidden style="margin-top:28px;border-top:1px solid var(--line);padding-top:22px">
+        <h4 style="border:0;padding:0;margin:0 0 6px">Fotos</h4>
+        <p class="note-p" style="margin-top:0">Arrastra las fotos para ordenarlas (en el celular, mantén presionada una). La primera es la portada.</p>
+        <div class="drop" id="photo-drop" role="button" tabindex="0" style="margin-top:14px">
+          <strong>Agregar fotos</strong>
+          <span>Toca aquí o arrastra las fotos. Puedes elegir varias a la vez.</span>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" multiple hidden>
+        <p class="note-p" id="photo-status" hidden></p>
+        <div class="pphotos" id="photo-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SOLICITUDES ===================== -->
+  <section class="tab-sec" id="tab-solicitudes">
+    <div class="pcard">
+      <div class="toolbar">
+        <h3>Solicitudes de cotización</h3>
+        <button class="btn btn-sm" id="btn-reload-sol">Actualizar</button>
+      </div>
+      <p class="note-p" style="margin:-6px 0 18px">Lo que llenan los visitantes en la página de Contacto, de la más reciente a la más antigua.</p>
+      <div id="sol-list"><p class="empty-p">Cargando...</p></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+<script src="assets/js/supabase-client.js"></script>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/db.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(async function () {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+  if (!supabaseClient) {
+    document.querySelector("main").innerHTML = '<div class="pcard"><h3>Panel sin conectar</h3><p class="note-p">Falta poner la URL y la llave pública del proyecto de Supabase en <code>assets/js/supabase-client.js</code>.</p></div>';
+    return;
+  }
+
+  const profile = await requireRole(["admin", "asesor"]);
+  const isAdmin = profile.role === "admin";
+  $("#who-name").textContent = profile.nombre || profile.email;
+  $("#who-role").textContent = isAdmin ? "Admin" : "Asesor";
+  $("#btn-logout").addEventListener("click", signOut);
+
+  /* ---------- Helpers ---------- */
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const money = (v) => v == null ? "" : new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v);
+  const slugify = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  const numOrNull = (id) => { const v = $(id).value; return v === "" ? null : parseInt(v, 10); };
+  const valOrNull = (id) => $(id).value.trim() || null;
+  const isImage = (f) => f.type.indexOf("image/") === 0;
+
+  async function uploadFile(path, file) {
+    const { error } = await supabaseClient.storage.from("vehiculos").upload(path, file, { upsert: true, cacheControl: "3600" });
+    if (error) throw error;
+    return supabaseClient.storage.from("vehiculos").getPublicUrl(path).data.publicUrl;
+  }
+  async function removeFiles(urls) {
+    const marker = "/object/public/vehiculos/";
+    const paths = urls.map((u) => { const i = u.indexOf(marker); return i === -1 ? null : decodeURIComponent(u.slice(i + marker.length)); }).filter(Boolean);
+    if (paths.length) await supabaseClient.storage.from("vehiculos").remove(paths);
+  }
+
+  /* ---------- Pestañas ---------- */
+  $$(".tabs-p button").forEach((b) => b.addEventListener("click", () => {
+    $$(".tabs-p button").forEach((x) => x.classList.toggle("on", x === b));
+    $$(".tab-sec").forEach((s) => s.classList.toggle("on", s.id === "tab-" + b.dataset.tab));
+  }));
+
+  /* Niveles de blindaje desde data.js */
+  $("#v-nivel").innerHTML = '<option value="">Elige</option>' + NIVELES.map((n) => '<option value="' + esc(n.id) + '">Nivel ' + esc(n.id) + " — " + esc(n.resumen) + "</option>").join("");
+
+  /* =========================================================
+     VEHÍCULOS
+     ========================================================= */
+  let vehicles = [];
+  let editingId = null;
+
+  async function loadVehicles() {
+    vehicles = (await fetchVehicles(true, true)) || [];
+    renderTable();
+    renderStats();
+  }
+
+  function renderStats() {
+    const activos = vehicles.filter((v) => v.estado !== "vendido" && v.estado !== "oculto");
+    $("#st-total").textContent = vehicles.length;
+    $("#st-disp").textContent = vehicles.filter((v) => v.estado === "disponible").length;
+    $("#st-venta").textContent = activos.filter((v) => v.modalidades.includes("venta")).length;
+    $("#st-alq").textContent = activos.filter((v) => v.modalidades.includes("alquiler")).length;
+  }
+
+  function precioCelda(v) {
+    const out = [];
+    if (v.modalidades.includes("venta")) out.push("Venta: <b>" + (v.precioVenta != null ? money(v.precioVenta) : "Consultar") + "</b>");
+    if (v.modalidades.includes("alquiler")) out.push("Día: <b>" + (v.tarifas.dia != null ? money(v.tarifas.dia) : "Consultar") + "</b>");
+    return out.join("<br>");
+  }
+
+  function renderTable() {
+    const q = $("#f-q").value.trim().toLowerCase();
+    const est = $("#f-estado").value;
+    const mod = $("#f-mod").value;
+    const list = vehicles.filter((v) =>
+      (!est || v.estado === est) &&
+      (!mod || v.modalidades.includes(mod)) &&
+      (!q || (v.marca + " " + v.linea + " " + v.ref + " " + v.anio).toLowerCase().includes(q))
+    );
+    const tbody = $("#v-tbody");
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-p">' + (vehicles.length ? "Ningún vehículo coincide con el filtro." : "Todavía no hay vehículos. Toca “Agregar vehículo” para cargar el primero.") + "</td></tr>";
+      return;
+    }
+    tbody.innerHTML = list.map((v) =>
+      "<tr>" +
+      '<td data-label="Foto">' + (v.fotos[0] ? '<img class="thumb" src="' + esc(v.fotos[0]) + '" alt="" loading="lazy">' : '<span class="thumb thumb-empty">SIN FOTO</span>') + "</td>" +
+      '<td class="cell-main"><div class="vt"><small>' + esc(v.ref) + "</small>" + esc(v.marca) + " " + esc(v.linea) + " " + esc(v.anio) + "</div></td>" +
+      '<td data-label="Tipo · Nivel">' + esc(v.tipo) + " · " + esc(v.nivel) + "</td>" +
+      '<td data-label="Modalidad"><div class="pills">' +
+        (v.modalidades.includes("venta") ? '<span class="pill">Venta</span>' : "") +
+        (v.modalidades.includes("alquiler") ? '<span class="pill">Alquiler</span>' : "") +
+        (v.destacado ? '<span class="pill star">★ Destacado</span>' : "") + "</div></td>" +
+      '<td data-label="Precio">' + precioCelda(v) + "</td>" +
+      '<td data-label="Estado"><select class="est ' + esc(v.estado) + '" data-estado="' + esc(v.id) + '" aria-label="Estado de ' + esc(v.ref) + '">' +
+        ["disponible", "reservado", "alquilado", "vendido", "oculto"].map((s) => '<option value="' + s + '"' + (v.estado === s ? " selected" : "") + ">" + s.charAt(0).toUpperCase() + s.slice(1) + "</option>").join("") + "</select></td>" +
+      '<td class="cell-acts"><div class="acts">' +
+        '<button class="btn btn-sm" data-edit="' + esc(v.id) + '">Editar</button>' +
+        '<button class="btn btn-sm" data-dup="' + esc(v.id) + '">Duplicar</button>' +
+        '<button class="btn btn-sm" data-del="' + esc(v.id) + '">Eliminar</button>' +
+      "</div></td></tr>"
+    ).join("");
+  }
+
+  $("#f-q").addEventListener("input", renderTable);
+  $("#f-estado").addEventListener("change", renderTable);
+  $("#f-mod").addEventListener("change", renderTable);
+
+  $("#v-tbody").addEventListener("click", async (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.edit) openForm(vehicles.find((v) => v.id === b.dataset.edit), false);
+    if (b.dataset.dup) openForm(vehicles.find((v) => v.id === b.dataset.dup), true);
+    if (b.dataset.del) {
+      const v = vehicles.find((x) => x.id === b.dataset.del);
+      if (!confirm("¿Eliminar " + v.marca + " " + v.linea + " " + v.anio + " y todas sus fotos? Esta acción no se puede deshacer.")) return;
+      const { data: fotos } = await supabaseClient.from("vehicle_photos").select("url").eq("vehicle_id", v.id);
+      const { error } = await supabaseClient.from("vehicles").delete().eq("id", v.id);
+      if (error) { alert("No se pudo eliminar: " + error.message); return; }
+      if (fotos && fotos.length) { try { await removeFiles(fotos.map((f) => f.url)); } catch (err) { console.error(err); } }
+      if (editingId === v.id) closeForm();
+      await loadVehicles();
+    }
+  });
+
+  /* Cambio rápido de estado desde la tabla */
+  $("#v-tbody").addEventListener("change", async (e) => {
+    const sel = e.target.closest("[data-estado]");
+    if (!sel) return;
+    const v = vehicles.find((x) => x.id === sel.dataset.estado);
+    const { error } = await supabaseClient.from("vehicles").update({ estado: sel.value }).eq("id", v.id);
+    if (error) { alert("No se pudo cambiar el estado: " + error.message); sel.value = v.estado; return; }
+    await loadVehicles();
+  });
+
+  /* ---------- Formulario ---------- */
+  function syncBlocks() {
+    $("#blk-venta").hidden = !$("#v-venta").checked;
+    $("#blk-alquiler").hidden = !$("#v-alquiler").checked;
+  }
+  function hints() {
+    [["#v-precio", "#h-precio"], ["#v-dia", "#h-dia"], ["#v-semana", "#h-semana"], ["#v-mes", "#h-mes"]].forEach(([i, h]) => {
+      const v = $(i).value;
+      $(h).textContent = v === "" ? "" : "= " + money(parseInt(v, 10));
+    });
+  }
+  ["#v-venta", "#v-alquiler"].forEach((i) => $(i).addEventListener("change", syncBlocks));
+  ["#v-precio", "#v-dia", "#v-semana", "#v-mes"].forEach((i) => $(i).addEventListener("input", hints));
+
+  function openForm(v, duplicate) {
+    editingId = v && !duplicate ? v.id : null;
+    $("#form-title").textContent = !v ? "Agregar vehículo" : duplicate ? "Duplicar vehículo (se guarda como uno nuevo)" : "Editar vehículo";
+    $("#v-marca").value = v ? v.marca : "";
+    $("#v-linea").value = v ? v.linea : "";
+    $("#v-anio").value = v ? v.anio : "";
+    $("#v-tipo").value = v ? v.tipo : "";
+    $("#v-nivel").value = v ? v.nivel : "";
+    $("#v-estado").value = v && !duplicate ? v.estado : "disponible";
+    $("#v-venta").checked = v ? v.modalidades.includes("venta") : true;
+    $("#v-alquiler").checked = v ? v.modalidades.includes("alquiler") : false;
+    $("#v-destacado").checked = v ? v.destacado : false;
+    $("#v-precio").value = v && v.precioVenta != null ? v.precioVenta : "";
+    $("#v-dia").value = v && v.tarifas.dia != null ? v.tarifas.dia : "";
+    $("#v-semana").value = v && v.tarifas.semana != null ? v.tarifas.semana : "";
+    $("#v-mes").value = v && v.tarifas.mes != null ? v.tarifas.mes : "";
+    $("#v-color").value = v ? v.color : "";
+    $("#v-trans").value = v ? v.transmision : "";
+    $("#v-comb").value = v ? v.combustible : "";
+    $("#v-cil").value = v ? v.cilindraje : "";
+    $("#v-pas").value = v && v.pasajeros != null ? v.pasajeros : "";
+    $("#v-desc").value = v ? v.descripcion : "";
+    syncBlocks(); hints();
+
+    setPhotoStatus("");
+    $("#photos-hint").hidden = !!editingId;
+    $("#photos-wrap").hidden = !editingId;
+    if (editingId) renderPhotos(editingId);
+
+    $("#form-card").hidden = false;
+    $("#form-card").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function closeForm() {
+    editingId = null;
+    $("#v-form").reset();
+    $("#form-card").hidden = true;
+  }
+  $("#btn-new").addEventListener("click", () => openForm(null, false));
+  $("#btn-cancel").addEventListener("click", closeForm);
+
+  $("#v-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const venta = $("#v-venta").checked;
+    const alquiler = $("#v-alquiler").checked;
+    if (!venta && !alquiler) { alert("Marca al menos una modalidad: en venta o en alquiler."); return; }
+
+    const marca = $("#v-marca").value.trim();
+    const linea = $("#v-linea").value.trim();
+    const anio = parseInt($("#v-anio").value, 10);
+    const payload = {
+      marca: marca, linea: linea, anio: anio,
+      tipo: $("#v-tipo").value, nivel: $("#v-nivel").value,
+      estado: $("#v-estado").value,
+      en_venta: venta, en_alquiler: alquiler,
+      destacado: $("#v-destacado").checked,
+      precio_venta: venta ? numOrNull("#v-precio") : null,
+      tarifa_dia: alquiler ? numOrNull("#v-dia") : null,
+      tarifa_semana: alquiler ? numOrNull("#v-semana") : null,
+      tarifa_mes: alquiler ? numOrNull("#v-mes") : null,
+      color: valOrNull("#v-color"),
+      transmision: $("#v-trans").value || null,
+      combustible: $("#v-comb").value || null,
+      cilindraje: valOrNull("#v-cil"),
+      pasajeros: numOrNull("#v-pas"),
+      descripcion: valOrNull("#v-desc")
+    };
+
+    const btn = $("#btn-save");
+    btn.disabled = true;
+    let error;
+    if (editingId) {
+      ({ error } = await supabaseClient.from("vehicles").update(payload).eq("id", editingId));
+    } else {
+      const id = slugify(marca + "-" + linea + "-" + anio) + "-" + Math.random().toString(36).slice(2, 7);
+      payload.id = id;
+      ({ error } = await supabaseClient.from("vehicles").insert(payload));
+      if (!error) editingId = id;
+    }
+    btn.disabled = false;
+    if (error) { alert("No se pudo guardar: " + error.message); return; }
+
+    await loadVehicles();
+    $("#form-title").textContent = "Editar vehículo";
+    $("#photos-hint").hidden = true;
+    $("#photos-wrap").hidden = false;
+    renderPhotos(editingId);
+    setPhotoStatus("Guardado. Ahora puedes agregar o reordenar las fotos.");
+  });
+
+  /* ---------- Fotos ---------- */
+  const photoList = $("#photo-list");
+  let photos = [];
+
+  function setPhotoStatus(t) { const s = $("#photo-status"); s.textContent = t; s.hidden = !t; }
+
+  async function renderPhotos(vehicleId) {
+    const { data, error } = await supabaseClient.from("vehicle_photos").select("*").eq("vehicle_id", vehicleId).order("posicion", { ascending: true });
+    if (error) { console.error(error); return; }
+    photos = data;
+    photoList.innerHTML = photos.map((p) =>
+      '<div class="pphoto" data-id="' + esc(p.id) + '">' +
+      '<img src="' + esc(p.url) + '" alt="" draggable="false" loading="lazy">' +
+      '<span class="cover">Portada</span>' +
+      '<button type="button" class="mk" title="Usar como portada">Hacer portada</button>' +
+      '<button type="button" class="rm" title="Quitar foto">×</button></div>'
+    ).join("") || '<p class="empty-p">Todavía no hay fotos.</p>';
+  }
+
+  /* La posición de cada foto es su lugar en pantalla; solo se guardan las que cambiaron */
+  async function savePhotoOrder() {
+    const changed = [];
+    photoList.querySelectorAll(".pphoto").forEach((el, i) => {
+      const p = photos.find((x) => x.id === el.dataset.id);
+      if (p && p.posicion !== i) changed.push({ p: p, i: i });
+    });
+    if (!changed.length) return;
+    setPhotoStatus("Guardando el orden…");
+    const res = await Promise.all(changed.map((c) => supabaseClient.from("vehicle_photos").update({ posicion: c.i }).eq("id", c.p.id)));
+    if (res.some((r) => r.error)) { setPhotoStatus("No se pudo guardar el orden. Inténtalo de nuevo."); renderPhotos(editingId); return; }
+    changed.forEach((c) => { c.p.posicion = c.i; });
+    setPhotoStatus("Orden guardado.");
+    loadVehicles();
+  }
+
+  if (typeof Sortable !== "undefined") {
+    Sortable.create(photoList, { animation: 150, draggable: ".pphoto", filter: "button", preventOnFilter: false, delay: 150, delayOnTouchOnly: true, onEnd: savePhotoOrder });
+  }
+
+  photoList.addEventListener("click", async (e) => {
+    const item = e.target.closest(".pphoto");
+    if (!item) return;
+    if (e.target.closest(".mk")) { photoList.prepend(item); savePhotoOrder(); return; }
+    if (e.target.closest(".rm")) {
+      if (!confirm("¿Quitar esta foto?")) return;
+      const p = photos.find((x) => x.id === item.dataset.id);
+      const { error } = await supabaseClient.from("vehicle_photos").delete().eq("id", item.dataset.id);
+      if (error) { alert("No se pudo quitar la foto: " + error.message); return; }
+      if (p) { try { await removeFiles([p.url]); } catch (err) { console.error(err); } }
+      photos = photos.filter((x) => x.id !== item.dataset.id);
+      item.remove();
+      if (!photos.length) photoList.innerHTML = '<p class="empty-p">Todavía no hay fotos.</p>';
+      setPhotoStatus("");
+      loadVehicles();
+    }
+  });
+
+  /* Reduce la foto antes de subirla (lado mayor de 1920 px, JPEG): las fotos de
+     celular pesan varios MB y así suben y cargan mucho más rápido. */
+  async function compressImage(file) {
+    try {
+      const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+      const scale = Math.min(1, 1920 / Math.max(bmp.width, bmp.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(bmp.width * scale);
+      c.height = Math.round(bmp.height * scale);
+      c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+      bmp.close();
+      const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.85));
+      if (blob && blob.size < file.size) return { blob: blob, ext: "jpg" };
+    } catch (err) { /* formato no soportado: se sube tal cual */ }
+    return { blob: file, ext: file.name.split(".").pop() };
+  }
+
+  /* Sube varias fotos a la vez (de a 3) y las deja al final, en el orden elegido */
+  async function addPhotos(files) {
+    if (!files.length || !editingId) return;
+    const vehicleId = editingId;
+    const { data: last } = await supabaseClient.from("vehicle_photos").select("posicion").eq("vehicle_id", vehicleId).order("posicion", { ascending: false }).limit(1);
+    const first = last && last.length ? last[0].posicion + 1 : 0;
+    const failed = [];
+    let next = 0, done = 0;
+    setPhotoStatus("Subiendo 0 de " + files.length + "…");
+
+    async function worker() {
+      while (next < files.length) {
+        const i = next++;
+        const file = files[i];
+        try {
+          const img = await compressImage(file);
+          const path = vehicleId + "/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + img.ext;
+          const url = await uploadFile(path, img.blob);
+          const { error } = await supabaseClient.from("vehicle_photos").insert({ vehicle_id: vehicleId, url: url, posicion: first + i });
+          if (error) throw error;
+        } catch (err) { console.error("Error subiendo " + file.name, err); failed.push(file.name); }
+        done++;
+        setPhotoStatus("Subiendo " + done + " de " + files.length + "…");
+      }
+    }
+    await Promise.all([worker(), worker(), worker()]);
+    if (vehicleId === editingId) await renderPhotos(vehicleId);
+    setPhotoStatus(failed.length ? "No se pudieron subir " + failed.length + " de " + files.length + ": " + failed.join(", ") : (files.length === 1 ? "Foto subida." : files.length + " fotos subidas."));
+    loadVehicles();
+  }
+
+  const input = $("#photo-input");
+  const drop = $("#photo-drop");
+  input.addEventListener("change", async (e) => { await addPhotos(Array.from(e.target.files || [])); e.target.value = ""; });
+  drop.addEventListener("click", () => input.click());
+  drop.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); } });
+  ["dragenter", "dragover"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("dragover"); }));
+  ["dragleave", "drop"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("dragover"); }));
+  drop.addEventListener("drop", (e) => addPhotos(Array.from(e.dataTransfer.files || []).filter(isImage)));
+
+  /* =========================================================
+     SOLICITUDES (lo que llenan en Contacto). Todo se muestra como texto (esc).
+     ========================================================= */
+  function haceCuanto(iso) {
+    const seg = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
+    const min = Math.round(seg / 60), h = Math.round(seg / 3600), d = Math.floor(seg / 86400);
+    if (seg < 60) return "hace un momento";
+    if (min < 60) return "hace " + min + (min === 1 ? " minuto" : " minutos");
+    if (h < 24) return "hace " + h + (h === 1 ? " hora" : " horas");
+    if (d === 1) return "ayer";
+    if (d < 7) return "hace " + d + " días";
+    if (d < 30) { const w = Math.floor(d / 7); return "hace " + w + (w === 1 ? " semana" : " semanas"); }
+    const m = Math.floor(d / 30); return "hace " + m + (m === 1 ? " mes" : " meses");
+  }
+  const fechaHora = (iso) => new Date(iso).toLocaleString("es-CO", { day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "2-digit" });
+  function waNum(cel) {
+    const d = String(cel || "").replace(/\D/g, "");
+    return d.length === 10 && d[0] === "3" ? "57" + d : d;
+  }
+
+  async function loadSolicitudes() {
+    const list = $("#sol-list");
+    const { data, error } = await supabaseClient.from("solicitudes").select("*").order("created_at", { ascending: false });
+    if (error) { list.innerHTML = '<p class="empty-p">No se pudieron cargar las solicitudes: ' + esc(error.message) + "</p>"; return; }
+
+    const nuevas = data.filter((r) => !r.atendida).length;
+    $("#st-sol").textContent = nuevas;
+    $("#sol-badge").textContent = nuevas;
+    $("#sol-badge").hidden = nuevas === 0;
+
+    if (!data.length) { list.innerHTML = '<p class="empty-p">Todavía no hay solicitudes. Cuando alguien llene el formulario de Contacto aparecerá aquí.</p>'; return; }
+    list.innerHTML = data.map((r) => {
+      const wa = waNum(r.celular);
+      const datos = [["Me interesa", r.interes], ["Periodo", r.periodo], ["Vehículo", r.vehiculo_ref], ["Celular", r.celular]].filter((x) => x[1]);
+      return '<article class="sol ' + (r.atendida ? "hecha" : "nueva") + '">' +
+        '<div class="sol-top"><div class="sol-n">' + esc(r.nombre) + (r.atendida ? "" : ' <span class="pill star">Nueva</span>') + "</div>" +
+        '<div class="sol-when"><strong>' + haceCuanto(r.created_at) + "</strong>" + fechaHora(r.created_at) + "</div></div>" +
+        "<dl>" + datos.map((x) => "<div><dt>" + x[0] + "</dt><dd>" + esc(x[1]) + "</dd></div>").join("") + "</dl>" +
+        (r.mensaje ? '<p class="msg">' + esc(r.mensaje) + "</p>" : "") +
+        '<div class="acts">' +
+          (wa ? '<a class="btn btn-gold btn-sm" target="_blank" rel="noopener" href="https://wa.me/' + wa + "?text=" + encodeURIComponent("Hola " + r.nombre + ", te escribimos de Armor Security por tu solicitud.") + '">WhatsApp</a>' : "") +
+          (wa ? '<a class="btn btn-sm" href="tel:+' + wa + '">Llamar</a>' : "") +
+          '<button class="btn btn-sm" data-aten="' + esc(r.id) + '" data-val="' + (r.atendida ? "0" : "1") + '">' + (r.atendida ? "Marcar como pendiente" : "Marcar como atendida") + "</button>" +
+          (isAdmin ? '<button class="btn btn-sm" data-delsol="' + esc(r.id) + '">Eliminar</button>' : "") +
+        "</div></article>";
+    }).join("");
+  }
+
+  $("#sol-list").addEventListener("click", async (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.aten) {
+      const { error } = await supabaseClient.from("solicitudes").update({ atendida: b.dataset.val === "1" }).eq("id", b.dataset.aten);
+      if (error) { alert("No se pudo actualizar: " + error.message); return; }
+      await loadSolicitudes();
+    }
+    if (b.dataset.delsol) {
+      if (!confirm("¿Eliminar esta solicitud? Esta acción no se puede deshacer.")) return;
+      const { error } = await supabaseClient.from("solicitudes").delete().eq("id", b.dataset.delsol);
+      if (error) { alert("No se pudo eliminar: " + error.message); return; }
+      await loadSolicitudes();
+    }
+  });
+  $("#btn-reload-sol").addEventListener("click", loadSolicitudes);
+  /* "hace X" y las solicitudes nuevas se refrescan cada minuto */
+  setInterval(() => { if (!document.hidden) loadSolicitudes(); }, 60000);
+
+  /* ---------- Carga inicial ---------- */
+  await loadVehicles();
+  await loadSolicitudes();
+})();
+</script>
+</body>
+</html>
