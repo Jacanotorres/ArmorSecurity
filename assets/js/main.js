@@ -27,6 +27,7 @@
     v == null ? "Consultar" : new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(v);
 
   const ICON_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.200zm4.5-6.100c-.2-.1-1.500-.7-1.700-.8s-.4-.1-.6.100-.6.8-.8 1-.3.2-.5.100a6.700 6.700 0 0 1-3.300-2.900c-.2-.4.2-.4.600-1.200.1-.1 0-.3 0-.4l-.8-1.900c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.300 3 3 0 0 0-.9 2.200 5.200 5.200 0 0 0 1.100 2.800 11.900 11.900 0 0 0 4.600 4c1.700.7 2.400.8 3.200.7a2.700 2.700 0 0 0 1.800-1.300 2.200 2.200 0 0 0 .2-1.300c-.1-.1-.3-.2-.5-.3z"/></svg>';
+  const ICON_LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
   const ICON_SHIELD = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.500 3.800 10.700 9 12 5.200-1.300 9-6.500 9-12V5l-9-4z"/></svg>';
 
   /* ---------- Siluetas de referencia (cuando aún no hay foto) ---------- */
@@ -130,6 +131,7 @@
       '<a class="' + act("blindaje").trim() + '" href="blindaje.html">Blindaje</a>' +
       '<a class="' + act("nosotros").trim() + '" href="nosotros.html">Nosotros</a>' +
       '<a class="' + act("contacto").trim() + '" href="contacto.html">Contacto</a>' +
+      '<a class="nav-panel" href="login.html" title="Entrar al panel de administración">' + ICON_LOCK + "<span>Panel</span></a>" +
       '<a class="btn btn-gold btn-sm" href="' + esc(contactHref("Hola, quiero cotizar un vehículo blindado.")) + '">Cotizar</a>' +
       "</nav></div>";
 
@@ -158,7 +160,7 @@
     $("#footer").innerHTML =
       '<div class="wrap"><div class="foot-grid">' +
       '<div class="foot-brand"><img src="assets/img/logo.webp" alt="Armor Security"><p>Vehículos blindados en venta y alquiler por periodos. Catálogo completo, claro y a la medida.</p></div>' +
-      '<div><h4>Explorar</h4><ul><li><a href="catalogo.html">Catálogo</a></li><li><a href="catalogo.html?modalidad=venta">En venta</a></li><li><a href="catalogo.html?modalidad=alquiler">En alquiler</a></li><li><a href="escoltas.html">Escoltas</a></li><li><a href="blindaje.html">Niveles de blindaje</a></li><li><a href="nosotros.html">Nosotros</a></li></ul></div>' +
+      '<div><h4>Explorar</h4><ul><li><a href="catalogo.html">Catálogo</a></li><li><a href="catalogo.html?modalidad=venta">En venta</a></li><li><a href="catalogo.html?modalidad=alquiler">En alquiler</a></li><li><a href="escoltas.html">Escoltas</a></li><li><a href="blindaje.html">Niveles de blindaje</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="login.html">Acceso al panel</a></li></ul></div>' +
       '<div><h4>Contacto</h4><ul>' + contacto.join("") + "</ul></div>" +
       (redes.length ? "<div><h4>Síguenos</h4><ul>" + redes.join("") + "</ul></div>" : "<div></div>") +
       "</div>" +

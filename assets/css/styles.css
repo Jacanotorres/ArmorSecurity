@@ -90,7 +90,8 @@ p { margin: 0; }
   letter-spacing: .14em; text-transform: uppercase; line-height: 1; white-space: nowrap;
 }
 .brand-name b { color: var(--gold); font-weight: 700; }
-.nav { display: flex; align-items: center; gap: 28px; }
+.site-header .wrap { width: min(1320px, 100% - 40px); }
+.nav { display: flex; align-items: center; gap: 20px; }
 .nav a {
   font-family: var(--font-display); font-weight: 600; font-size: 16px;
   letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
@@ -98,6 +99,9 @@ p { margin: 0; }
   transition: color .2s, border-color .2s;
 }
 .nav a:hover, .nav a.active { color: var(--text); border-color: var(--gold); }
+.nav a.nav-panel { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--line-gold); color: var(--gold); }
+.nav a.nav-panel svg { width: 16px; height: 16px; }
+.nav a.nav-panel:hover { color: var(--gold-2); border-color: var(--gold); background: rgba(227, 174, 43, .1); }
 .nav a.btn-gold, .nav a.btn-gold:hover { color: #0a0a0a; border: 1px solid var(--gold); padding: 10px 18px; font-size: 15px; }
 .menu-btn {
   display: none; width: 44px; height: 44px; background: none; border: 1px solid var(--line);
@@ -119,6 +123,8 @@ p { margin: 0; }
   }
   .nav.open { transform: none; }
   .nav a { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 19px; }
+  .nav a.nav-panel { justify-content: center; padding: 14px; margin-top: 16px; font-size: 19px; }
+  .nav a.nav-panel svg { width: 20px; height: 20px; }
   .nav .btn { margin-top: 16px; }
 }
 @media (max-width: 520px) { .brand-name { font-size: 20px; } .brand img { height: 42px; } }
